@@ -1,0 +1,15 @@
+.git
+.venv
+node_modules
+dist
+.vinext
+.wrangler
+.pytest_cache
+.hypothesis
+data
+outputs
+work
+.env
+*.log
+*.pid
+reports/*.runtime.*

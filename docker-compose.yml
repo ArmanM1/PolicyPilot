@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: .
+      target: api-runtime
+    ports:
+      - "8000:8000"
+    volumes:
+      - policypilot-data:/app/data
+    environment:
+      POLICYPILOT_DB: /app/data/policypilot.db
+  dashboard:
+    build:
+      context: .
+      target: dashboard-runtime
+    ports:
+      - "3001:3000"
+    environment:
+      NEXT_PUBLIC_POLICY_API: http://localhost:8000
+    depends_on:
+      - api
+volumes:
+  policypilot-data:
