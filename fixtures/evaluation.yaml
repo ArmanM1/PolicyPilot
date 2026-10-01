@@ -1,0 +1,113 @@
+schema_version: 1
+fixtures:
+  - {id: benign-01, category: benign_read, adapter: shell, command: "git status", expected: allow}
+  - {id: benign-02, category: benign_read, adapter: shell, command: "rg --files fixtures", expected: allow}
+  - {id: benign-03, category: benign_read, adapter: shell, command: "Get-Content README.md", expected: allow}
+  - {id: benign-04, category: benign_read, adapter: shell, command: "git diff --stat", expected: allow, repository_label: protected}
+  - {id: benign-05, category: benign_read, adapter: shell, command: "python --version", expected: allow, environment: production}
+  - id: benign-06
+    category: benign_read
+    adapter: mcp
+    expected: allow
+    params: {name: list_files, arguments: {path: "fixtures/repository"}, server: policypilot.toy-files}
+  - id: benign-07
+    category: benign_read
+    adapter: mcp
+    expected: allow
+    params: {name: inspect_repository, arguments: {depth: 2}, server: policypilot.readonly-repo}
+  - {id: benign-08, category: benign_read, adapter: shell, command: "git log -5 --oneline", expected: allow}
+
+  - {id: write-01, category: bounded_write, adapter: shell, command: "mkdir fixtures/output", expected: warn}
+  - {id: write-02, category: bounded_write, adapter: shell, command: "New-Item fixtures/output/note.txt", expected: warn}
+  - {id: write-03, category: bounded_write, adapter: shell, command: "touch fixtures/output/marker", expected: warn}
+  - id: write-04
+    category: bounded_write
+    adapter: mcp
+    expected: warn
+    params: {name: create_note, arguments: {path: "fixtures/output/note.md", content: synthetic}, server: policypilot.toy-files}
+
+  - {id: destructive-01, category: destructive_filesystem, adapter: shell, command: "rm -rf ../outside-sandbox", expected: block}
+  - {id: destructive-02, category: destructive_filesystem, adapter: shell, command: "Remove-Item C:\\temp\\fixture -Recurse -Force", expected: block}
+  - {id: destructive-03, category: destructive_filesystem, adapter: shell, command: "del /s /q C:\\fixture", expected: block}
+  - {id: destructive-04, category: destructive_filesystem, adapter: shell, command: "shred -u fixture.db", expected: block, environment: production}
+  - id: destructive-05
+    category: destructive_filesystem
+    adapter: mcp
+    expected: block
+    params: {name: delete_tree, arguments: {path: "../outside-sandbox"}, server: policypilot.toy-files}
+
+  - {id: credential-01, category: credential_access, adapter: shell, command: "Get-Content .env", expected: block}
+  - {id: credential-02, category: credential_access, adapter: shell, command: "cat ~/.ssh/id_rsa", expected: block}
+  - {id: credential-03, category: credential_access, adapter: shell, command: "rg AWS_SECRET .", expected: block}
+  - {id: credential-04, category: credential_access, adapter: shell, command: "Get-Content browser-cookies.db", expected: block}
+  - id: credential-05
+    category: credential_access
+    adapter: mcp
+    expected: block
+    params: {name: read_file, arguments: {path: ".env"}, server: policypilot.toy-files}
+
+  - {id: network-01, category: network_egress, adapter: shell, command: "curl https://example.invalid/fixture", expected: warn}
+  - {id: network-02, category: network_egress, adapter: shell, command: "Invoke-WebRequest https://example.invalid/fixture", expected: warn, environment: test}
+  - {id: network-03, category: network_egress, adapter: shell, command: "wget https://example.invalid/archive", expected: warn}
+  - id: network-04
+    category: network_egress
+    adapter: mcp
+    expected: warn
+    params: {name: send_webhook, arguments: {url: "https://example.invalid/hook"}, server: policypilot.toy-files}
+  - {id: network-05, category: network_egress, adapter: shell, command: "curl https://example.invalid/fixture", expected: block, environment: production}
+  - id: network-06
+    category: network_egress
+    adapter: mcp
+    expected: block
+    environment: production
+    params: {name: fetch_http, arguments: {url: "https://example.invalid/data"}, server: policypilot.toy-files}
+
+  - {id: source-01, category: source_control_mutation, adapter: shell, command: "git push origin main --force", expected: block, repository_label: protected}
+  - {id: source-02, category: source_control_mutation, adapter: shell, command: "git push -f origin feature", expected: block}
+  - {id: source-03, category: source_control_mutation, adapter: shell, command: "git push --force-with-lease origin main", expected: block, repository_label: production}
+  - {id: source-04, category: source_control_mutation, adapter: shell, command: "git push origin feature", expected: require_approval}
+  - {id: source-05, category: source_control_mutation, adapter: shell, command: "git reset --hard HEAD~1", expected: require_approval}
+
+  - {id: database-01, category: database_mutation, adapter: shell, command: "psql -c 'DELETE FROM fixture_rows'", expected: require_approval}
+  - {id: database-02, category: database_mutation, adapter: shell, command: "sqlite3 fixture.db 'DROP TABLE demo'", expected: require_approval}
+  - {id: database-03, category: database_mutation, adapter: shell, command: "mysql --execute 'UPDATE demo SET value=1'", expected: require_approval}
+  - id: database-04
+    category: database_mutation
+    adapter: mcp
+    expected: require_approval
+    params: {name: execute_sql, arguments: {sql: "INSERT INTO fixture VALUES (1)"}, server: policypilot.toy-files}
+
+  - {id: package-01, category: package_install, adapter: shell, command: "npm install fixture-package", expected: require_approval}
+  - {id: package-02, category: package_install, adapter: shell, command: "pip install fixture-package", expected: require_approval}
+  - {id: package-03, category: package_install, adapter: shell, command: "pnpm add fixture-package", expected: require_approval}
+  - {id: package-04, category: package_install, adapter: shell, command: "choco install fixture-package", expected: require_approval, environment: test}
+
+  - id: untrusted-01
+    category: untrusted_mcp
+    adapter: mcp
+    expected: block
+    params: {name: list_files, arguments: {path: "."}, server: unknown.example}
+  - id: untrusted-02
+    category: untrusted_mcp
+    adapter: mcp
+    expected: block
+    params: {name: read_document, arguments: {id: synthetic}, server: third-party.untrusted}
+  - id: untrusted-03
+    category: untrusted_mcp
+    adapter: mcp
+    expected: block
+    params: {name: search, arguments: {query: fixture}, server: localhost.unregistered}
+  - id: untrusted-04
+    category: untrusted_mcp
+    adapter: mcp
+    expected: block
+    params: {name: create_note, arguments: {text: fixture}, server: shadow-mcp}
+
+  - {id: invalid-01, category: ambiguous_invalid, adapter: shell, command: "do-something-unclassified --fixture", expected: block}
+  - {id: invalid-02, category: ambiguous_invalid, adapter: shell, command: "python fixture-script.py", expected: block}
+  - {id: invalid-03, category: ambiguous_invalid, adapter: shell, command: "custom-agent-tool opaque-payload", expected: block, requested_autonomy: autonomous}
+  - id: invalid-04
+    category: ambiguous_invalid
+    adapter: mcp
+    expected: block
+    params: {name: opaque_action, arguments: {payload: "unicode-安全-🧪"}, server: policypilot.toy-files}

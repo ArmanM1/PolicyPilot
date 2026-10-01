@@ -1,0 +1,106 @@
+version: "2026.08.1"
+allowlisted_mcp_servers:
+  - policypilot.toy-files
+  - policypilot.readonly-repo
+rules:
+  - id: block_destructive_filesystem
+    priority: 1000
+    outcome: block
+    reason: Destructive filesystem operations are never executed by the fixture gateway.
+    match:
+      risk_category: destructive_filesystem
+
+  - id: block_credential_access
+    priority: 990
+    outcome: block
+    reason: Credential access is outside the prototype safety boundary.
+    match:
+      risk_category: credential_access
+
+  - id: block_untrusted_mcp_server
+    priority: 980
+    outcome: block
+    reason: MCP servers are denied until explicitly allowlisted in the versioned policy.
+    match:
+      risk_category: untrusted_mcp
+
+  - id: block_protected_force_push
+    priority: 970
+    outcome: block
+    reason: Force pushes are blocked for protected repository labels.
+    match:
+      risk_category: source_control_mutation
+      repository_label_in: [protected, production]
+      arguments_regex: "git\\s+push.*(?:--force|-f\\b)"
+
+  - id: block_force_push
+    priority: 960
+    outcome: block
+    reason: Force pushes are destructive source-control mutations.
+    match:
+      risk_category: source_control_mutation
+      arguments_regex: "git\\s+push.*(?:--force|-f\\b)"
+
+  - id: block_production_network_egress
+    priority: 920
+    outcome: block
+    reason: Unmodeled outbound network access is blocked in production.
+    match:
+      risk_category: network_egress
+      environment: production
+
+  - id: require_database_approval
+    priority: 900
+    outcome: require_approval
+    reason: Database mutation requires a scoped, expiring, single-use approval.
+    match:
+      risk_category: database_mutation
+
+  - id: require_package_approval
+    priority: 890
+    outcome: require_approval
+    reason: Package installation changes the dependency boundary and requires approval.
+    match:
+      risk_category: package_install
+
+  - id: require_source_mutation_approval
+    priority: 880
+    outcome: require_approval
+    reason: Source-control mutations require one-event human approval.
+    match:
+      risk_category: source_control_mutation
+
+  - id: warn_development_network_egress
+    priority: 800
+    outcome: warn
+    reason: Outbound network access is simulated and surfaced for review in development.
+    match:
+      risk_category: network_egress
+      environment_in: [development, test]
+
+  - id: allow_read_only_inspection
+    priority: 700
+    outcome: allow
+    reason: The request matches the bounded read-only fixture allowlist.
+    match:
+      risk_category: benign_read
+
+  - id: warn_bounded_write
+    priority: 600
+    outcome: warn
+    reason: Bounded writes are simulated and retained for review.
+    match:
+      risk_category: bounded_write
+
+  - id: block_ambiguous_or_invalid
+    priority: 500
+    outcome: block
+    reason: Unclassified requests fail closed.
+    match:
+      risk_category: ambiguous_invalid
+
+  - id: fail_closed_fallback
+    priority: 0
+    outcome: block
+    reason: The request did not match an explicit policy classification.
+    match: {}

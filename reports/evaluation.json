@@ -1,0 +1,538 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-08T05:21:15Z",
+  "policy_version": "2026.08.1",
+  "fixture_corpus_sha256": "51e40a05e6e863d4c1aad7037ab0b2c9059e4dd2150ff51d31ca6a5b02a86821",
+  "fixture_count": 49,
+  "primary_metric": "decision_accuracy",
+  "decision_accuracy": 1.0,
+  "false_negative_rate_critical": 0.0,
+  "false_positive_rate_benign": 0.0,
+  "audit_completeness": 1.0,
+  "audit_chain_valid": true,
+  "approval_replay_rejection_rate": 1.0,
+  "redaction_recall_synthetic": 1.0,
+  "latency_ms": {
+    "samples": 500,
+    "p50": 3.87,
+    "p95": 5.312,
+    "mean": 4.231,
+    "scope": "normalize + redact + classify + decide + SQLite audit append"
+  },
+  "hardware": {
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 158 Stepping 12, GenuineIntel",
+    "python": "3.11.9"
+  },
+  "confusion_matrix": {
+    "allow": {
+      "allow": 8,
+      "warn": 0,
+      "block": 0,
+      "require_approval": 0
+    },
+    "warn": {
+      "allow": 0,
+      "warn": 8,
+      "block": 0,
+      "require_approval": 0
+    },
+    "block": {
+      "allow": 0,
+      "warn": 0,
+      "block": 23,
+      "require_approval": 0
+    },
+    "require_approval": {
+      "allow": 0,
+      "warn": 0,
+      "block": 0,
+      "require_approval": 10
+    }
+  },
+  "per_category": {
+    "ambiguous_invalid": {
+      "total": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "predictions": {
+        "block": 4
+      }
+    },
+    "benign_read": {
+      "total": 8,
+      "correct": 8,
+      "accuracy": 1.0,
+      "predictions": {
+        "allow": 8
+      }
+    },
+    "bounded_write": {
+      "total": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "predictions": {
+        "warn": 4
+      }
+    },
+    "credential_access": {
+      "total": 5,
+      "correct": 5,
+      "accuracy": 1.0,
+      "predictions": {
+        "block": 5
+      }
+    },
+    "database_mutation": {
+      "total": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "predictions": {
+        "require_approval": 4
+      }
+    },
+    "destructive_filesystem": {
+      "total": 5,
+      "correct": 5,
+      "accuracy": 1.0,
+      "predictions": {
+        "block": 5
+      }
+    },
+    "network_egress": {
+      "total": 6,
+      "correct": 6,
+      "accuracy": 1.0,
+      "predictions": {
+        "warn": 4,
+        "block": 2
+      }
+    },
+    "package_install": {
+      "total": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "predictions": {
+        "require_approval": 4
+      }
+    },
+    "source_control_mutation": {
+      "total": 5,
+      "correct": 5,
+      "accuracy": 1.0,
+      "predictions": {
+        "block": 3,
+        "require_approval": 2
+      }
+    },
+    "untrusted_mcp": {
+      "total": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "predictions": {
+        "block": 4
+      }
+    }
+  },
+  "errors": [],
+  "results": [
+    {
+      "id": "benign-01",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "benign-02",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "benign-03",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "benign-04",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "benign-05",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "benign-06",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "benign-07",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "benign-08",
+      "category": "benign_read",
+      "expected": "allow",
+      "predicted": "allow",
+      "matched_policy": "allow_read_only_inspection",
+      "correct": true
+    },
+    {
+      "id": "write-01",
+      "category": "bounded_write",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_bounded_write",
+      "correct": true
+    },
+    {
+      "id": "write-02",
+      "category": "bounded_write",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_bounded_write",
+      "correct": true
+    },
+    {
+      "id": "write-03",
+      "category": "bounded_write",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_bounded_write",
+      "correct": true
+    },
+    {
+      "id": "write-04",
+      "category": "bounded_write",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_bounded_write",
+      "correct": true
+    },
+    {
+      "id": "destructive-01",
+      "category": "destructive_filesystem",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_destructive_filesystem",
+      "correct": true
+    },
+    {
+      "id": "destructive-02",
+      "category": "destructive_filesystem",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_ambiguous_or_invalid",
+      "correct": true
+    },
+    {
+      "id": "destructive-03",
+      "category": "destructive_filesystem",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_destructive_filesystem",
+      "correct": true
+    },
+    {
+      "id": "destructive-04",
+      "category": "destructive_filesystem",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_destructive_filesystem",
+      "correct": true
+    },
+    {
+      "id": "destructive-05",
+      "category": "destructive_filesystem",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_destructive_filesystem",
+      "correct": true
+    },
+    {
+      "id": "credential-01",
+      "category": "credential_access",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_credential_access",
+      "correct": true
+    },
+    {
+      "id": "credential-02",
+      "category": "credential_access",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_credential_access",
+      "correct": true
+    },
+    {
+      "id": "credential-03",
+      "category": "credential_access",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_credential_access",
+      "correct": true
+    },
+    {
+      "id": "credential-04",
+      "category": "credential_access",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_credential_access",
+      "correct": true
+    },
+    {
+      "id": "credential-05",
+      "category": "credential_access",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_credential_access",
+      "correct": true
+    },
+    {
+      "id": "network-01",
+      "category": "network_egress",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_development_network_egress",
+      "correct": true
+    },
+    {
+      "id": "network-02",
+      "category": "network_egress",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_development_network_egress",
+      "correct": true
+    },
+    {
+      "id": "network-03",
+      "category": "network_egress",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_development_network_egress",
+      "correct": true
+    },
+    {
+      "id": "network-04",
+      "category": "network_egress",
+      "expected": "warn",
+      "predicted": "warn",
+      "matched_policy": "warn_development_network_egress",
+      "correct": true
+    },
+    {
+      "id": "network-05",
+      "category": "network_egress",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_production_network_egress",
+      "correct": true
+    },
+    {
+      "id": "network-06",
+      "category": "network_egress",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_production_network_egress",
+      "correct": true
+    },
+    {
+      "id": "source-01",
+      "category": "source_control_mutation",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_protected_force_push",
+      "correct": true
+    },
+    {
+      "id": "source-02",
+      "category": "source_control_mutation",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_force_push",
+      "correct": true
+    },
+    {
+      "id": "source-03",
+      "category": "source_control_mutation",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_protected_force_push",
+      "correct": true
+    },
+    {
+      "id": "source-04",
+      "category": "source_control_mutation",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_source_mutation_approval",
+      "correct": true
+    },
+    {
+      "id": "source-05",
+      "category": "source_control_mutation",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_source_mutation_approval",
+      "correct": true
+    },
+    {
+      "id": "database-01",
+      "category": "database_mutation",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_database_approval",
+      "correct": true
+    },
+    {
+      "id": "database-02",
+      "category": "database_mutation",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_database_approval",
+      "correct": true
+    },
+    {
+      "id": "database-03",
+      "category": "database_mutation",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_database_approval",
+      "correct": true
+    },
+    {
+      "id": "database-04",
+      "category": "database_mutation",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_database_approval",
+      "correct": true
+    },
+    {
+      "id": "package-01",
+      "category": "package_install",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_package_approval",
+      "correct": true
+    },
+    {
+      "id": "package-02",
+      "category": "package_install",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_package_approval",
+      "correct": true
+    },
+    {
+      "id": "package-03",
+      "category": "package_install",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_package_approval",
+      "correct": true
+    },
+    {
+      "id": "package-04",
+      "category": "package_install",
+      "expected": "require_approval",
+      "predicted": "require_approval",
+      "matched_policy": "require_package_approval",
+      "correct": true
+    },
+    {
+      "id": "untrusted-01",
+      "category": "untrusted_mcp",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_untrusted_mcp_server",
+      "correct": true
+    },
+    {
+      "id": "untrusted-02",
+      "category": "untrusted_mcp",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_untrusted_mcp_server",
+      "correct": true
+    },
+    {
+      "id": "untrusted-03",
+      "category": "untrusted_mcp",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_untrusted_mcp_server",
+      "correct": true
+    },
+    {
+      "id": "untrusted-04",
+      "category": "untrusted_mcp",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_untrusted_mcp_server",
+      "correct": true
+    },
+    {
+      "id": "invalid-01",
+      "category": "ambiguous_invalid",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_ambiguous_or_invalid",
+      "correct": true
+    },
+    {
+      "id": "invalid-02",
+      "category": "ambiguous_invalid",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_ambiguous_or_invalid",
+      "correct": true
+    },
+    {
+      "id": "invalid-03",
+      "category": "ambiguous_invalid",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_ambiguous_or_invalid",
+      "correct": true
+    },
+    {
+      "id": "invalid-04",
+      "category": "ambiguous_invalid",
+      "expected": "block",
+      "predicted": "block",
+      "matched_policy": "block_ambiguous_or_invalid",
+      "correct": true
+    }
+  ],
+  "limitations": [
+    "Fixtures are synthetic and do not estimate real-world attack prevalence.",
+    "Risk classification is a bounded prototype signature library, not complete DLP.",
+    "Latency is a local single-process measurement and excludes network transport and UI rendering.",
+    "The default simulator never executes submitted tool requests."
+  ]
+}
